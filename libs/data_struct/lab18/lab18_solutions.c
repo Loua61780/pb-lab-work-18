@@ -40,3 +40,29 @@ int getWordReverse(char* searchEnd, char* searchStart, WordDescriptor* word) {
 
     return 1;
 }
+
+void forEachWord(char* string, void (*function)(WordDescriptor)) {
+    char* searchPoint = string;
+    WordDescriptor word;
+
+    while (getWord(searchPoint, &word)) {
+        function(word);
+
+        searchPoint = word.end;
+    }
+}
+
+static bool isDigit(char character) {
+    return isdigit(character);
+}
+
+static bool isAlpha(char character) {
+    return isalpha(character);
+}
+
+void lettersToStartDigitsToEnd(WordDescriptor word) {
+    char* stringBufferEnd = copy(word.begin, word.end, string_buffer);
+    char* digitsEnd = copyIf(string_buffer, stringBufferEnd, word.begin, isAlpha);
+
+    copyIf(string_buffer, stringBufferEnd, digitsEnd, isDigit);
+}
