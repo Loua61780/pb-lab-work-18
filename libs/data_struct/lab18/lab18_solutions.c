@@ -88,3 +88,57 @@ void replaceDigitsBySpaces(char* string) {
 
     *copy(string_buffer, writePoint, string) = '\0';
 }
+
+int compareWords(WordDescriptor left, WordDescriptor right) {
+    while (left.begin != left.end && right.begin != right.end && *left.begin == *right.begin) {
+        left.begin++;
+        right.begin++;
+    }
+
+    if (left.begin == left.end && right.begin == right.end) {
+        return 0;
+    }
+
+    if (left.begin == left.end && right.begin != right.end) {
+        return -(*right.begin);
+    }
+
+    if (left.begin != left.end && right.begin == right.end) {
+        return *left.begin;
+    }
+
+    return *left.begin - *right.begin;
+}
+
+void replace(char* string, char* replaceable, char* replacement) {
+    size_t replaceableLength = getLength(replaceable);
+    size_t replacementLength = getLength(replacement);
+    WordDescriptor replaceableWord = {replaceable, replaceable + replaceableLength};
+    WordDescriptor replacementWord = {replacement, replacement + replacementLength};
+    char* readPoint;
+    char* writePoint;
+
+    if (replaceableLength > replacementLength) {
+        readPoint = string;
+    } else {
+        *copy(string, string + getLength(string), string_buffer) = '\0';
+        readPoint = string_buffer;
+    }
+
+    writePoint = string;
+    WordDescriptor cur_word;
+
+    while (getWord(readPoint, &cur_word)) {
+        writePoint = copy(readPoint, cur_word.begin, writePoint);
+
+        if (compareWords(cur_word, replaceableWord) == 0) {
+            writePoint = copy(replacementWord.begin, replacementWord.end, writePoint);
+        } else {
+            writePoint = copy(cur_word.begin, cur_word.end, writePoint);
+        }
+
+        readPoint = cur_word.end;
+    }
+
+    *writePoint = '\0';
+}
