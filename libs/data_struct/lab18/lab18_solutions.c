@@ -27,3 +27,16 @@ int getWord(char *beginSearch, WordDescriptor* word) {
 
     return 1;
 }
+
+int getWordReverse(char* searchEnd, char* searchStart, WordDescriptor* word) {
+    word->end = findNonSpaceReverse(searchEnd, searchStart) + 1;
+
+    if (word->end == searchEnd + 1) {
+        word->begin = searchStart + 1;
+        return 0;
+    }
+
+    word->begin = findSpaceReverse(searchEnd, word->end - 1) + 1;
+
+    return 1;
+}
