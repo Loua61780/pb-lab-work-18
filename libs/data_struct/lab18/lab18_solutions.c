@@ -66,3 +66,25 @@ void lettersToStartDigitsToEnd(WordDescriptor word) {
 
     copyIf(string_buffer, stringBufferEnd, digitsEnd, isDigit);
 }
+
+void replaceDigitsBySpaces(char* string) {
+    char* readPoint = string;
+    char* writePoint = string_buffer;
+
+    while (*readPoint != '\0') {
+        if (isdigit(*readPoint)) {
+            int digit = *readPoint - '0';
+
+            for (int i = 0; i < digit; i++) {
+                *writePoint = ' ';
+                writePoint++;
+            }
+        } else {
+            *writePoint = *readPoint;
+            writePoint++;
+        }
+        readPoint++;
+    }
+
+    *copy(string_buffer, writePoint, string) = '\0';
+}
